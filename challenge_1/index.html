@@ -1,4 +1,4 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
   <head>
     <title>Tic-Tac-Toe</title>
@@ -8,12 +8,26 @@
   <body>
     <h2>Play Tic-Tac-Toe!</h2>
     <h3>Instructions:</h3>
-    <p>Player 1 is X. Player 2 is O.</p>
+    <div>
+      <table>
+        <tr>
+          <th></th>
+          <th id="p1"></th>
+          <th id="p2"></th>
+        </tr>
+        <tr>
+          <th>Wins</th>
+          <th id="p1Score">0</th>
+          <th id="p2Score">0</th>
+        </tr>
+      </table>
+    </div>
     <p id="turn"></p>
     <div id="app"></div>
     <div>
       <button id="reset">Reset Game!</button>
     </div>
+    <p id="winner"></p>
   </body>
 </html>
 

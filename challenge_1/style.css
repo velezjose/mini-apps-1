@@ -1,3 +1,16 @@
+body {
+  background-color: #bcd4e6;
+  font-family: Arial, sans-serif;
+}
+
+h3, p, table, #app, #reset {
+  margin-left: 50px;
+}
+
+#reset {
+  margin-top: 20px;
+}
+
 .box {
   width: 100px;
   height: 100px;
