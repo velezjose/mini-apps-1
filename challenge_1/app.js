@@ -1,13 +1,18 @@
 document.addEventListener("DOMContentLoaded", function(event) { 
   let app = document.getElementById('app');
   let turn = document.getElementById('turn');
+  let winner = document.getElementById('winner');
+  let p1 = document.getElementById('p1');
+  let p2 = document.getElementById('p2');
+
 
   // Defining some important game variables.
   let played = [];
   let won = false;
-  let count = 0;
+  let p1Next = true;
   let player;
 
+  // -------------  Helper functions  ------------- //
   const xOrO = (content, xCount, oCount) => {
     if (content.innerHTML === 'X') {
       xCount += 1
@@ -95,9 +100,14 @@ document.addEventListener("DOMContentLoaded", function(event) {
     return checkCols() || checkRows() || checkDiagonals();
   }
 
+  // -------------  End of helper functions  ------------- //
+
+
+  // -------------  Render functions  ------------- //
+
   // Display who's turn it is.
   const displayTurn = (event) => {
-    player = count ? 'Player 2' : 'Player 1';
+    player = p1Next ? player1 : player2;
     turn.innerHTML = player + '\'s turn:'; 
   };
 
@@ -110,8 +120,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     // Played array contains all of the clicked buttons' HTML ids.
     played.push(event.target.id);
-    count = (count + 1) % 2
-    event.target.innerHTML = count ? 'X' : 'O';
+    event.target.innerHTML = p1Next ? 'X' : 'O';
+    p1Next = !p1Next;
     
     // Calculate checkWins once and store result in variable won.
     won = checkWins();
@@ -120,20 +130,27 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
     if (won) {
-      player = count ? 'Player 1' : 'Player 2';
-      alert(player + ' won!');
+      player = p1Next ? player2 : player1;
+      p1Next = !p1Next;
+      winner.innerHTML = player + ' won!';
     } else if (!won && played.length === 9) {
-      alert('Tie!');
+      winner.innerHTML = 'Tie!';
     }
 
   };
+
+
+  // -------------  End of render functions  ------------- //
+
   
+  // -------------  Init functions  ------------- //
+
   const createGame = () => {
     // Reset variables if they contain any value.
     app.innerHTML = '';
+    winner.innerHTML = '';
     played = [];
     won = false;
-    count = 0;
     
     // Render the 3 x 3 Tic-Tac-Toe board:
     // 1. Create each row
@@ -158,5 +175,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
   // If players want to reset the board, run createGame again.
   document.getElementById('reset').addEventListener('click', createGame);
   
+  // Get Player 1 and Player 2's names.
+  p1.innerHTML = player1 = prompt('What is player 1\'s name?');
+  p2.innerHTML = player2 = prompt('What is player 2\'s name?');;
+
   createGame();
 });
