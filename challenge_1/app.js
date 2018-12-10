@@ -1,16 +1,27 @@
 document.addEventListener("DOMContentLoaded", function(event) { 
-  let app = document.getElementById('app');
-  let turn = document.getElementById('turn');
-  let winner = document.getElementById('winner');
   let p1 = document.getElementById('p1');
   let p2 = document.getElementById('p2');
+  let p1Score = document.getElementById('p1Score');
+  let p2Score = document.getElementById('p2Score');
+  let turn = document.getElementById('turn');
+  let app = document.getElementById('app');
+  let winner = document.getElementById('winner');
 
 
   // Defining some important game variables.
   let played = [];
   let won = false;
   let p1Next = true;
-  let player;
+  let currentPlayer;
+  p1.innerHTML = player1 = prompt('Who is Player 1?');
+  p1.innerHTML += ' (X)';
+  p2.innerHTML = player2 = prompt('Who is Player 2?');
+  p2.innerHTML += ' (O)';
+
+  while (player1 === player2) {
+    player2 = prompt('Player 2 should have a different name than Player 1. Who is Player 2?');
+    p2.innerHTML = player2;
+  }
 
   // -------------  Helper functions  ------------- //
   const xOrO = (content, xCount, oCount) => {
@@ -79,7 +90,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // Reset xCount and oCount.
     [xCount, oCount] = resetCounts();
 
-    // Define j to subtract from it as we iterate through the columns
+    // Minor diagonal
+    // Define col to subtract from it as we iterate on each row to get the corresponding column index
     let col = 2;
     for (let row = 0; row < 3; row += 1) {
       let content = document.getElementById(row.toString() + col.toString());
@@ -91,26 +103,34 @@ document.addEventListener("DOMContentLoaded", function(event) {
       return true;
     }
 
-    // Return false if no major diagonal nor minor diagonal has returned an
-    // xCount or oCount of 3.
+    // Return false if no major diagonal nor minor diagonal has returned an xCount or oCount of 3.
     return false;
   };
   
   const checkWins = () => {
     return checkCols() || checkRows() || checkDiagonals();
-  }
+  };
 
   // -------------  End of helper functions  ------------- //
 
 
   // -------------  Render functions  ------------- //
 
-  // Display who's turn it is.
-  const displayTurn = (event) => {
-    player = p1Next ? player1 : player2;
-    turn.innerHTML = player + '\'s turn:'; 
+  const incrementWinnerCount = (winner) => {
+    if (winner === player1) {
+      p1Score.innerHTML = Number(p1Score.innerHTML) + 1;
+    } else if (winner === player2) {
+      p2Score.innerHTML = Number(p2Score.innerHTML) + 1;
+    }
   };
 
+  // Display who's turn it is.
+  const displayTurn = () => {
+    currentPlayer = p1Next ? player1 : player2;
+    turn.innerHTML = currentPlayer + '\'s turn:'; 
+  };
+
+  // Displays 'X' or 'O' depending on who played.
   const display = (event) => {
     // Don't modify the board if the game has already ended or if user
     // clicks on the same button that has already been played.
@@ -118,21 +138,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
       return;
     }
 
-    // Played array contains all of the clicked buttons' HTML ids.
+    // Played array contains all of the clicked buttons' html ids.
     played.push(event.target.id);
     event.target.innerHTML = p1Next ? 'X' : 'O';
     p1Next = !p1Next;
     
-    // Calculate checkWins once and store result in variable won.
+    // Check if any player has won.
     won = checkWins();
     if (!won) {
-      displayTurn(event);
+      displayTurn();
     }
 
     if (won) {
-      player = p1Next ? player2 : player1;
+      currentPlayer = p1Next ? player2 : player1;
+      incrementWinnerCount(currentPlayer);
       p1Next = !p1Next;
-      winner.innerHTML = player + ' won!';
+      winner.innerHTML = currentPlayer + ' won!';
     } else if (!won && played.length === 9) {
       winner.innerHTML = 'Tie!';
     }
@@ -173,11 +194,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   // If players want to reset the board, run createGame again.
-  document.getElementById('reset').addEventListener('click', createGame);
-  
-  // Get Player 1 and Player 2's names.
-  p1.innerHTML = player1 = prompt('What is player 1\'s name?');
-  p2.innerHTML = player2 = prompt('What is player 2\'s name?');;
+  document.getElementById('new').addEventListener('click', createGame);
 
   createGame();
 });
