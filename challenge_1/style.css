@@ -7,6 +7,22 @@ h3, p, table, #app, #reset {
   margin-left: 50px;
 }
 
+table {
+  border-collapse: collapse;
+}
+
+tr, th {
+  border: black 1px solid;
+}
+
+th {
+  width: 60px;
+}
+
+tr {
+  height: 30px;
+}
+
 #reset {
   margin-top: 20px;
 }
