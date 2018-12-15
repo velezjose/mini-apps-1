@@ -4,7 +4,7 @@ const RowEntry = ({ onCircleClickHandler, rowIndex, columnIndex, colorValue }) =
   return (
     <button
       onClick={onCircleClickHandler}
-      style={{ width: 50, height: 50, borderRadius: '80%', outline: 'none', backgroundColor: color }}
+      style={{ width: 50, height: 50, borderRadius: '80%', outline: 'none', backgroundColor: color, margin: 10 }}
       id={rowIndex.toString() + columnIndex.toString()}>
     </button>
   )
