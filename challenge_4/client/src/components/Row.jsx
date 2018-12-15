@@ -2,12 +2,12 @@ import RowEntry from './RowEntry.jsx';
 
 const Row = ({ row, rowIndex, onCircleClickHandler }) => (
   <div>
-    { row.map((rowEntry, columnIndex) => 
-      (<RowEntry 
+    { row.map((rowEntry, columnIndex) =>
+      (<RowEntry
         colorValue={rowEntry}
         onCircleClickHandler={onCircleClickHandler}
-        rowIndex={rowIndex} 
-        columnIndex={columnIndex} 
+        rowIndex={rowIndex}
+        columnIndex={columnIndex}
       />))
     }
   </div>

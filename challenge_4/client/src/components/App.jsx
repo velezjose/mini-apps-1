@@ -1,29 +1,37 @@
 import React from 'react';
 import Table from './Table.jsx';
 
+
 const rows = 6;
 const columns = 7;
 
-const initialTable = [];
-for (let i = 0; i < rows; i += 1) {
-  initialTable.push([]);
-  for (let j = 0; j < columns; j += 1) {
-    initialTable[i].push(0);
+const getInitialTable = () => {
+  let initialTable = [];
+  for (let i = 0; i < rows; i += 1) {
+    initialTable.push([]);
+    for (let j = 0; j < columns; j += 1) {
+      initialTable[i].push(0);
+    }
   }
+  return initialTable;
 }
 
-const colIndexesToFill = [];
-for (let i = 0; i < columns; i += 1) {
-  colIndexesToFill.push(rows - 1);
-}
+const getColIndexesToFill = () => {
+  let colIndexesToFill = [];
+  for (let i = 0; i < columns; i += 1) {
+    colIndexesToFill.push(rows - 1);
+  }
+  return colIndexesToFill;
+};
+
 
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      table: initialTable,
-      columnFillTracker: colIndexesToFill,
+      table: getInitialTable(),
+      columnFillTracker: getColIndexesToFill(),
       player1: true,
       hasWon: {
         someone: false,
@@ -63,8 +71,35 @@ class App extends React.Component {
     if (someoneWon) {
       newHasWon.someone = true;
       newHasWon.player1 = this.state.player1;
+
+      this.postWinner(newHasWon.player1);
     } 
   }
+
+  postWinner(player1Won) {
+    let whoWon = player1Won ? 'Player 1' : 'Player 2';
+
+    let options = {
+      method: 'POST',
+      body: whoWon
+    };
+
+    fetch('/', options)
+      .then(() => {
+        console.log('posted nicely!');
+        setTimeout(() => this.setState({
+          table: getInitialTable(),
+          columnFillTracker: getColIndexesToFill(),
+          player1: true,
+          hasWon: {
+            someone: false,
+            player1: false
+          } 
+        }), 5000);
+      })
+  }
+
+
 
   checkRows(newTable, colorCode, rowIndex) {
     let row = newTable[rowIndex];
@@ -123,7 +158,7 @@ class App extends React.Component {
     :
       (<div>
         <Table table={this.state.table} onCircleClickHandler={this.onCircleClickHandler.bind(this)} />
-        {color} has won!
+        <p>{color} has won!</p>
       </div>)
   }
 }
